@@ -1,0 +1,15 @@
+{
+  "name": "bananabot",
+  "version": "1.0.0",
+  "description": "A discord bot for bananous things",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chokidar": "^3.5.3",
+    "discord.js": "^14.7.1"
+  }
+}
