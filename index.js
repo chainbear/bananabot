@@ -34,7 +34,7 @@ chokidar.watch(CHANNEL_NAMES_FILE, { awaitWritefinish: true }).on('all', (event,
 
 let managedChannels_ = [];
 
-client.once(Events.ClientReady, client => {
+client.once(Events.ClientReady, async client => {
     console.log(`Logged in as ${client.user.tag}!`);
     client.channels.cache.forEach(channel => {
         if (channel.name.startsWith(CHANNEL_PREFIX)) {
@@ -46,8 +46,10 @@ client.once(Events.ClientReady, client => {
         }
         if (channel.name === MAGIC_CHANNEL_NAME) {
             if (channel.members.size > 0) {
-                new_channel = createChannel(channel);
-                channel.members.forEach(member => member.voice.setChannel(new_channel));
+                createChannel(channel).then(new_channel => {
+                    channel.members.forEach(member => member.voice.setChannel(new_channel));
+                });
+
             }
 
         }
@@ -66,8 +68,9 @@ client.on(Events.VoiceStateUpdate, async (before, after) => {
 
     if (after.channel != null && after.channel.name === MAGIC_CHANNEL_NAME) {
 
-        new_channel = createChannel( after.channel);
-        await after.member.voice.setChannel(new_channel);
+        createChannel(after.channel).then(new_channel => {
+            after.member.voice.setChannel(new_channel)
+        });
 
     }
 
