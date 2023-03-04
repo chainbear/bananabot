@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { colornames } = require("../lib/colornames.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -11,14 +12,25 @@ module.exports = {
 		.setDMPermission(false),
 	async execute(interaction) {
 		let existingRoles = [];
-		color = interaction.options.getString('color')?.toUpperCase() ?? '';
+		color = interaction.options.getString('color')?.toLowerCase() ?? '';
+		discordUser = `${interaction.member.user.username}#${interaction.member.user.discriminator}`;
+
+		console.debug(`Request: ${color} for ${discordUser}`);
+
+		if (color in colornames) {
+			console.debug(`Color ${color} found in color names`);
+			color = colornames[color]
+		}
+
+		color = color.replace("#", "");
+
 		if (color.length === 0) {
 			removeColorRolesFromMember(interaction.member);
 			await interaction.reply(`Removed color roles.`);
 			return;
 		}
 
-		if (!/^[0-9A-F]{6}$/.test(color)) {
+		if (!/^[0-9a-f]{6}$/.test(color)) {
 			await interaction.reply(`Invalid hex code ${color} :(`);
 			return;
 		}
