@@ -1,15 +1,11 @@
-FROM node:lts-alpine
+FROM cgr.dev/chainguard/node:18
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --only=production
+RUN npm ci --only=production --omit=dev
 
 COPY . .
 
-RUN apk add --no-cache tini
-# Tini is now available at /sbin/tini
-ENTRYPOINT ["/sbin/tini", "--"]
-
-CMD ["node", "index.js"]
+CMD ["index.js"]
