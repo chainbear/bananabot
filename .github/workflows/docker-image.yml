@@ -2,6 +2,11 @@ name: Docker Image CI
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+  packages: write
+  id-token: write  # This is needed for OIDC federation.
+
 jobs:
   docker:
     runs-on: ubuntu-latest
