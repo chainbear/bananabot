@@ -1,4 +1,4 @@
-FROM cgr.dev/chainguard/node:18
+FROM cgr.dev/chainguard/node:latest
 
 WORKDIR /app
 
