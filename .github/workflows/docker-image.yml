@@ -17,7 +17,7 @@ jobs:
         name: Chainguard Login
         uses: chainguard-dev/actions/setup-chainctl@main
         with:
-          identity: 3e1bbf75871e9233b44648ebecdde5443b172469/03e0e848a1fa0be2
+          identity: 3e1bbf75871e9233b44648ebecdde5443b172469/6440180bad2c46e3
       -
         name: Docker meta
         id: meta
