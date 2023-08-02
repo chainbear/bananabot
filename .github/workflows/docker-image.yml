@@ -18,7 +18,7 @@ jobs:
         name: Chainguard Login
         uses: chainguard-dev/actions/setup-chainctl@main
         with:
-          identity: 3e1bbf75871e9233b44648ebecdde5443b172469/6440180bad2c46e3
+          identity: 3e1bbf75871e9233b44648ebecdde5443b172469/3f4c254fd89cb892
       -
         name: Docker meta
         id: meta
@@ -26,7 +26,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ghcr.io/wkprojects/bananabot
+            ghcr.io/chainbear/bananabot
           # generate Docker tags based on the following events/attributes
           tags: |
             type=ref,event=branch
