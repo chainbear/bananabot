@@ -1,6 +1,6 @@
 name: Docker Image CI
 
-on: [push, pull_request]
+on: [push]
 
 permissions:
   contents: read
@@ -30,7 +30,6 @@ jobs:
           # generate Docker tags based on the following events/attributes
           tags: |
             type=ref,event=branch
-            type=ref,event=pr
             type=sha
       -
         name: Set up QEMU
