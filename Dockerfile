@@ -1,4 +1,6 @@
-FROM cgr.dev/chainguard/node:latest
+FROM node:21-alpine
+
+RUN apk add --no-cache tini
 
 WORKDIR /app
 
@@ -8,4 +10,5 @@ RUN npm ci --only=production --omit=dev
 
 COPY . .
 
-CMD ["index.js"]
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["node", "index.js"]
