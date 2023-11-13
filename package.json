@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "chokidar": "^3.5.3",
-    "discord.js": "^14.13.0"
+    "discord.js": "^14.14.1"
   },
   "overrides": {
     "undici": "^5.26.2"
