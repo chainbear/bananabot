@@ -69,6 +69,7 @@ client.on(Events.VoiceStateUpdate, async (before, after) => {
     if (after.channel != null && after.channel.name === MAGIC_CHANNEL_NAME) {
 
         createChannel(after.channel).then(new_channel => {
+            new_channel.setRTCRegion("rotterdam");
             after.member.voice.setChannel(new_channel)
         });
 
