@@ -14,16 +14,20 @@ const MAGIC_CATEGORY_NAME = "Auto Voice";
 const CHANNEL_NAMES_FILE = "/etc/bananabot/channel_names";
 
 let channelNames = [
+    'Chicken Dinner',
     'Eisen 2',
     'ezpz',
     'Holzauge',
     'Inting',
     'Jeeeeenkins!!',
     'Leeeeeroy...!',
+    'Monkey Mode',
     'Need boost!',
     'Olympisch Weitwurf',
+    'Road to Pochinki',
     'Sir Feed-a-lot',
     'Sweating',
+    'Voicy McVoiceface',
 ];
 
 
