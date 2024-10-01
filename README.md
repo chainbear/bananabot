@@ -5,4 +5,4 @@ that joins such channels.
 Also, it has a command `/color`, which allows users to set their own color in the member list.
 
 To add this bot to your server use the following URL:
-https://discord.com/oauth2/authorize?client_id=679385603363831809&permissions=285212688&scope=bot%20applications.commands
+https://discord.com/oauth2/authorize?client_id=679385603363831809&permissions=268435472&scope=bot%20applications.commands
