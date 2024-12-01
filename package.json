@@ -11,8 +11,5 @@
   "dependencies": {
     "chokidar": "^4.0.1",
     "discord.js": "^14.16.2"
-  },
-  "overrides": {
-    "undici": "^5.26.2"
   }
 }
