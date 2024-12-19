@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chokidar": "^4.0.2",
+    "chokidar": "^4.0.3",
     "discord.js": "^14.16.2"
   }
 }
