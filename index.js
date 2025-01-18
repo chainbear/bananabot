@@ -5,10 +5,15 @@ const chokidar = require('chokidar');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const { Client, Collection, Events, GatewayIntentBits, VoiceChannel, ChannelType } = require('discord.js');
-const { Channel } = require('diagnostics_channel');
+const {Client, Collection, Events, GatewayIntentBits, ChannelType} = require('discord.js');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMembers] });
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildMembers,
+    ]
+});
 
 const MAGIC_CATEGORY_NAME = "Auto Voice";
 const CHANNEL_NAMES_FILE = "/etc/bananabot/channel_names";
@@ -31,8 +36,7 @@ let channelNames = [
 ];
 
 
-
-chokidar.watch(CHANNEL_NAMES_FILE, { awaitWritefinish: true }).on('all', (event, path) => {
+chokidar.watch(CHANNEL_NAMES_FILE, {awaitWritefinish: true}).on('all', (event, path) => {
     setChannelNamesFromFile(path);
 });
 
@@ -54,16 +58,16 @@ client.on(Events.GuildDelete, async guild => {
 
 client.on(Events.VoiceStateUpdate, async (before, after) => {
     let guild;
-    if (before.channel != null && managedCategories_[after.guild] == before.channel.parent) {
+    if (before.channel != null && managedCategories_[after.guild] === before.channel.parent) {
         guild = before.guild;
         console.log(`Guild ${guild.name}: User ${before.member.user.username} left ${before.channel.name}.`);
-    } else if (after.channel != null && managedCategories_[after.guild] == after.channel.parent) {
+    } else if (after.channel != null && managedCategories_[after.guild] === after.channel.parent) {
         guild = after.guild;
         console.log(`Guild ${guild.name}: User ${before.member.user.username} joined ${after.channel.name}!`);
     }
 
     if (guild != null) {
-        reconcileChannels(after.guild, managedCategories_[guild]);
+        await reconcileChannels(after.guild, managedCategories_[guild]);
     }
 
 });
@@ -82,9 +86,9 @@ client.on(Events.InteractionCreate, async interaction => {
     } catch (error) {
         console.error(error);
         if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+            await interaction.followUp({content: 'There was an error while executing this command!', ephemeral: true});
         } else {
-            await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+            await interaction.reply({content: 'There was an error while executing this command!', ephemeral: true});
         }
     }
 });
@@ -103,10 +107,8 @@ async function createVoiceChannel(guild, parent) {
 async function initialize(client) {
     console.log(`ROOT: Logged in as ${client.user.tag}!`);
     console.log(`ROOT: Bot is member of ${client.guilds.cache.size} guilds.`);
-    let channelsPerGuild_ = [];
     client.guilds.cache.forEach(guild => {
         initializeGuild(guild);
-        channelsPerGuild_[guild] = 0;
     });
 
     console.log("ROOT: Initialization complete!");
@@ -130,7 +132,7 @@ async function initializeGuild(guild) {
 
     managedCategories_[guild] = magic_category;
 
-    reconcileChannels(guild, magic_category);
+    await reconcileChannels(guild, magic_category);
 
     console.log(`Guild ${guild.name}: Initialization complete!`);
 
@@ -145,21 +147,21 @@ async function reconcileChannels(guild, magic_category) {
 
     empty_channels
         .filter(c => c.lastMessageId !== null)
-        .each(async c => {
+        .each(c => {
             console.log(`Guild ${guild.name}: Channel ${c.name} has messages, deleting...`);
             c.delete();
             empty_channels.sweep(ec => ec === c);
         });
 
     if (empty_channels.size === 0) {
-        createVoiceChannel(guild, magic_category);
+        await createVoiceChannel(guild, magic_category);
     } else if (empty_channels.size > 1) {
         let survivor = empty_channels.random();
         console.log(`Guild ${guild.name}: Too many empty channels! Keeping only ${survivor.name} (ID: ${survivor.id})..`);
         empty_channels.sweep(c => c === survivor);
-        empty_channels.forEach(async c => {
+        empty_channels.forEach(c => {
             console.log(`Guild ${guild.name}: Deleting channel ${c.name} (ID: ${c.id}...`);
-            await c.delete();
+            c.delete();
         });
     }
 }
