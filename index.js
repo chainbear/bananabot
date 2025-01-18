@@ -190,4 +190,11 @@ for (const file of commandFiles) {
     }
 }
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN).then(
+    () => {
+        console.log("ROOT: Login successful.");
+    },
+    (err) => {
+        console.error(`ROOT: Login failed with error: ${err}`);
+    }
+);
