@@ -138,17 +138,28 @@ async function initializeGuild(guild) {
 
 async function reconcileChannels(guild, magic_category) {
     console.log(`Guild ${guild.name}: Reconciling channels...`);
+    await guild.channels.fetch();
+
     let children_channels = magic_category.children.cache.filter(c => c.type === ChannelType.GuildVoice);
-    let empty_channels = children_channels.filter(c => c.members.size == 0);
-    if (empty_channels.size == 0) {
+    let empty_channels = children_channels.filter(c => c.members.size === 0);
+
+    empty_channels
+        .filter(c => c.lastMessageId !== null)
+        .each(async c => {
+            console.log(`Guild ${guild.name}: Channel ${c.name} has messages, deleting...`);
+            c.delete();
+            empty_channels.sweep(ec => ec === c);
+        });
+
+    if (empty_channels.size === 0) {
         createVoiceChannel(guild, magic_category);
     } else if (empty_channels.size > 1) {
         let survivor = empty_channels.random();
         console.log(`Guild ${guild.name}: Too many empty channels! Keeping only ${survivor.name} (ID: ${survivor.id})..`);
-        empty_channels.sweep(c => c == survivor);
+        empty_channels.sweep(c => c === survivor);
         empty_channels.forEach(async c => {
             console.log(`Guild ${guild.name}: Deleting channel ${c.name} (ID: ${c.id}...`);
-            c.delete();
+            await c.delete();
         });
     }
 }
