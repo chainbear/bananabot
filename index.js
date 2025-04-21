@@ -209,5 +209,6 @@ client.login(process.env.DISCORD_TOKEN).then(
     },
     (err) => {
         console.error(`ROOT: Login failed with error: ${err}`);
+        process.exit(1);
     }
 );
